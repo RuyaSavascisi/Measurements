@@ -6,17 +6,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.event.TickEvent;
-import net.neoforged.neoforge.event.TickEvent.PlayerTickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.joml.Matrix4f;
 
 public class ClientHandler {
 	@SubscribeEvent
-	public void onPlayerTick(PlayerTickEvent event) {
-		if (event.phase == TickEvent.Phase.END && event.side == LogicalSide.CLIENT) {
-			ClientClass.onPlayerTick(event.player);
+	public void onPlayerTick(PlayerTickEvent.Post event) {
+		if (event.getEntity().level().isClientSide) {
+			ClientClass.onPlayerTick(event.getEntity());
 		}
 	}
 
