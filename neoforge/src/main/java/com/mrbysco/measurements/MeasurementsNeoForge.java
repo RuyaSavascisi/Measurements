@@ -18,14 +18,14 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 public class MeasurementsNeoForge {
 
 	public MeasurementsNeoForge(IEventBus eventBus, Dist dist, ModContainer container) {
-		container.registerConfig(ModConfig.Type.CLIENT, MeasurementConfigNeoForge.clientSpec);
-		eventBus.register(MeasurementConfigNeoForge.class);
-
 		CommonClass.init();
 
 		eventBus.addListener(this::addTabContents);
 
 		if (dist.isClient()) {
+			container.registerConfig(ModConfig.Type.CLIENT, MeasurementConfigNeoForge.clientSpec);
+			eventBus.register(MeasurementConfigNeoForge.class);
+
 			NeoForge.EVENT_BUS.register(new ClientHandler());
 			NeoForge.EVENT_BUS.register(new LoginHandler());
 		}

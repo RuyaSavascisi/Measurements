@@ -2,6 +2,8 @@ package com.mrbysco.measurements.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import com.mrbysco.measurements.Constants;
 import com.mrbysco.measurements.config.LineColor;
 import com.mrbysco.measurements.config.TextColor;
 import com.mrbysco.measurements.platform.Services;
@@ -17,6 +19,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -82,10 +85,10 @@ public class MeasurementBox {
 	public void render(ResourceKey<Level> currentDimensionKey, PoseStack poseStack, RenderBuffers renderBuffers, Camera camera, Matrix4f projection) {
 		if (!dimensionKey.location().equals(currentDimensionKey.location())) return;
 
-		final float[] color = this.lineColor.getTextureDiffuseColors();
-		final float r = color[0];
-		final float g = color[1];
-		final float b = color[2];
+		int color = this.lineColor.getTextureDiffuseColor();
+		final float r = (float)FastColor.ARGB32.red(color) / 255F;
+		final float g = (float)FastColor.ARGB32.green(color) / 255F;
+		final float b = (float)FastColor.ARGB32.blue(color) / 255F;
 		final float a = 0.95F;
 
 		Vec3 pos = camera.getPosition();
@@ -165,6 +168,7 @@ public class MeasurementBox {
 		poseStack.pushPose();
 		poseStack.translate(pos.x, pos.y + size * 5.0, pos.z);
 		poseStack.mulPose(camera.rotation());
+		poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 		poseStack.scale(-size, -size, -size);
 		poseStack.translate(-font.width(length) / 2f, 0, 0);
 		Matrix4f pose = poseStack.last().pose();
